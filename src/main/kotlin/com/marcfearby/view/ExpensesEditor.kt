@@ -1,12 +1,14 @@
 package com.marcfearby.view
 
+import com.marcfearby.controller.ItemController
 import com.marcfearby.model.ExpensesEntryModel
 import javafx.scene.layout.BorderPane
 import tornadofx.*
 
 class ExpensesEditor: View("Expenses") {
 
-    val model = ExpensesEntryModel()
+    private val controller: ItemController by inject()
+    private val model = ExpensesEntryModel()
 
     override val root: BorderPane = borderpane {
         center = vbox {
@@ -25,9 +27,12 @@ class ExpensesEditor: View("Expenses") {
                         textfield(model.itemPrice)
                     }
                 }
+
                 hbox(10.0) {
                     button("Add Item") {
-                        action {  }
+                        action {
+                            addItem()
+                        }
                     }
                     button("Delete Item") {
                         action {  }
@@ -36,7 +41,23 @@ class ExpensesEditor: View("Expenses") {
                         action {  }
                     }
                 }
+
+                fieldset {
+                    tableview<ExpensesEntryModel> {
+                        items = controller.items
+                        column("ID", ExpensesEntryModel::id)
+                        column("Added", ExpensesEntryModel::entryDate)
+                        column("Item name", ExpensesEntryModel::itemName)
+                        column("Item price", ExpensesEntryModel::itemPrice)
+                    }
+                }
             }
+        }
+    }
+
+    private fun addItem() {
+        with(model) {
+            controller.add(entryDate.value, itemName.value, itemPrice.value)
         }
     }
 

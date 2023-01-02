@@ -25,9 +25,13 @@ class ItemController: Controller() {
         }.asObservable()
     }
 
+    var items: ObservableList<ExpensesEntryModel> by singleAssign()
+
     init {
 //        add(LocalDate.now(), "Bananas", 4.95)
 //        add(LocalDate.now(), "Milk", 3.00)
+
+        items = listOfItems
 
         listOfItems.forEach {
             println("Item Name: ${it.itemName} (${'$'}${it.itemPrice})")
