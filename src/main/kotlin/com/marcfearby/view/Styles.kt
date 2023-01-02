@@ -4,11 +4,11 @@ import tornadofx.*
 
 class Styles: Stylesheet() {
     companion object {
-        val mainView by cssclass()
+        val mainWorkspace by cssclass()
     }
 
     init {
-        mainView {
+        mainWorkspace {
             backgroundColor += c("EBEBEB")
         }
     }
