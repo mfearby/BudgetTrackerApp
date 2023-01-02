@@ -26,9 +26,8 @@ class ItemController: Controller() {
     }
 
     init {
-        // This isn't working, but he only demo'd it for now. Will see how things go when I wire up the UI
-        add(LocalDate.now(), "Bananas", 4.95)
-        add(LocalDate.now(), "Milk", 3.00)
+//        add(LocalDate.now(), "Bananas", 4.95)
+//        add(LocalDate.now(), "Milk", 3.00)
 
         listOfItems.forEach {
             println("Item Name: ${it.itemName} (${'$'}${it.itemPrice})")

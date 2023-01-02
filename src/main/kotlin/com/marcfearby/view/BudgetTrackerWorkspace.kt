@@ -15,6 +15,7 @@ class BudgetTrackerWorkspace: Workspace("Budget Tracker Workspace", NavigationMo
         createTables()
 
         ItemController()
+        dock<ExpensesEditor>()
 
         tabContainer.tabClosingPolicy = TabPane.TabClosingPolicy.UNAVAILABLE
     }
