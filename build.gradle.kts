@@ -25,6 +25,8 @@ javafx {
 dependencies {
     testImplementation(kotlin("test"))
     implementation("no.tornado:tornadofx:1.7.20")
+    implementation("org.jetbrains.exposed:exposed:0.17.14")
+    implementation("org.xerial:sqlite-jdbc:3.40.0.0")
 }
 
 tasks.test {
