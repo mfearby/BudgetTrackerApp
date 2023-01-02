@@ -40,10 +40,10 @@ class ExpensesEntry(id: Int, entryDate: LocalDate, itemName: String, itemPrice: 
 }
 
 class ExpensesEntryModel: ItemViewModel<ExpensesEntry>() {
-    val id = bind { item.idProperty }
-    val entryDate = bind { item.entryDateProperty }
-    val itemName = bind { item.itemNameProperty}
-    val itemPrice = bind { item.itemPriceProperty}
+    val id = bind { item?.idProperty }
+    val entryDate = bind { item?.entryDateProperty }
+    val itemName = bind { item?.itemNameProperty}
+    val itemPrice = bind { item?.itemPriceProperty}
 }
 
 fun ResultRow.toExpensesEntry() = ExpensesEntry(
