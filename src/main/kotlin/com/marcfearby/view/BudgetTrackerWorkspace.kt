@@ -19,13 +19,7 @@ class BudgetTrackerWorkspace: Workspace("Budget Tracker Workspace", NavigationMo
         Database.connect("jdbc:sqlite:./budget-tracker.db", "org.sqlite.JDBC")
         createTables()
 
-        execute {
-            ExpensesEntryTable.insert {
-                it[entryDate] = LocalDate.now().toDateTime()
-                it[itemName] = "Candy"
-                it[itemPrice] = BigDecimal.valueOf(5.95)
-            }
-        }
+
 
         tabContainer.tabClosingPolicy = TabPane.TabClosingPolicy.UNAVAILABLE
     }
