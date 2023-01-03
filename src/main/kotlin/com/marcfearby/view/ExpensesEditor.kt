@@ -2,6 +2,8 @@ package com.marcfearby.view
 
 import com.marcfearby.controller.ItemController
 import com.marcfearby.model.ExpensesEntryModel
+import javafx.scene.input.KeyCode
+import javafx.scene.input.KeyEvent
 import javafx.scene.layout.BorderPane
 import tornadofx.*
 
@@ -18,6 +20,7 @@ class ExpensesEditor: View("Expenses") {
                         maxWidth = 220.0
                         datepicker(model.entryDate) {
                             this.required()
+                            // This validator doesn't work if the user changes the date via the keyboard :-(
                             validator {
                                 when {
                                     it?.dayOfMonth.toString().isEmpty()
@@ -25,6 +28,9 @@ class ExpensesEditor: View("Expenses") {
                                             || it?.year.toString().isEmpty() -> error("Date is required")
                                     else -> null
                                 }
+                            }
+                            setOnKeyPressed {
+                                invokeAddItem(it)
                             }
                         }
                     }
@@ -39,6 +45,9 @@ class ExpensesEditor: View("Expenses") {
                                     else -> null
                                 }
                             }
+                            setOnKeyPressed {
+                                invokeAddItem(it)
+                            }
                         }
                     }
                     field("Item price") {
@@ -51,6 +60,9 @@ class ExpensesEditor: View("Expenses") {
                                     else -> null
                                 }
                             }
+                        }
+                        setOnKeyPressed {
+                            invokeAddItem(it)
                         }
                     }
                 }
@@ -82,6 +94,15 @@ class ExpensesEditor: View("Expenses") {
                         column("Item price", ExpensesEntryModel::itemPrice)
                     }
                 }
+            }
+        }
+    }
+
+    private fun invokeAddItem(event: KeyEvent) {
+        if (event.code == KeyCode.ENTER) {
+            model.commit {
+                addItem()
+                model.rollback()
             }
         }
     }
