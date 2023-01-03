@@ -49,7 +49,11 @@ class ItemController: Controller() {
             }
         }
 
-        return ExpensesEntry(newRow[ExpensesEntryTable.id], entryDate, itemName, itemPrice)
+        val newEntry = ExpensesEntry(newRow[ExpensesEntryTable.id], entryDate, itemName, itemPrice)
+        listOfItems.add(ExpensesEntryModel().apply {
+            item = newEntry
+        })
+        return newEntry
     }
 
     fun update(item: ExpensesEntryModel): Int {
