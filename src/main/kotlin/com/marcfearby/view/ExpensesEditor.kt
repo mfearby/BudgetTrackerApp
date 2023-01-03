@@ -11,6 +11,7 @@ class ExpensesEditor: View("Expenses") {
 
     private val controller: ItemController by inject()
     private val model = ExpensesEntryModel()
+    var mTableView: TableViewEditModel<ExpensesEntryModel> by singleAssign()
 
     override val root: BorderPane = borderpane {
         center = vbox {
@@ -78,7 +79,11 @@ class ExpensesEditor: View("Expenses") {
                         }
                     }
                     button("Delete Item") {
-                        action {  }
+                        action {
+                            mTableView.tableView.selectedItem?.let {
+                                controller.delete(it)
+                            }
+                        }
                     }
                     button("Reset") {
                         action {  }
@@ -86,8 +91,9 @@ class ExpensesEditor: View("Expenses") {
                 }
 
                 fieldset {
-                    tableview<ExpensesEntryModel> {
+                    tableview {
                         items = controller.items
+                        mTableView = editModel
                         column("ID", ExpensesEntryModel::id)
                         column("Added", ExpensesEntryModel::entryDate)
                         column("Item name", ExpensesEntryModel::itemName)

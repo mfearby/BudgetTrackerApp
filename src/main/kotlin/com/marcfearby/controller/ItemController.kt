@@ -70,6 +70,7 @@ class ItemController: Controller() {
         return execute {
             ExpensesEntryTable.deleteWhere { ExpensesEntryTable.id eq(item.id.value) }
         }
+        listOfItems.remove(item)
     }
 
 }
