@@ -6,7 +6,9 @@ import com.marcfearby.model.ExpensesEntryTable
 import com.marcfearby.model.toExpensesEntry
 import com.marcfearby.util.execute
 import com.marcfearby.util.toDateTime
+import javafx.collections.FXCollections
 import javafx.collections.ObservableList
+import javafx.scene.chart.PieChart
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
@@ -26,6 +28,7 @@ class ItemController: Controller() {
     }
 
     var items: ObservableList<ExpensesEntryModel> by singleAssign()
+    var pieItemsData = FXCollections.observableArrayList<PieChart.Data>()
 
     init {
 //        add(LocalDate.now(), "Bananas", 4.95)
@@ -35,10 +38,11 @@ class ItemController: Controller() {
 
         listOfItems.forEach {
             println("Item Name: ${it.itemName} (${'$'}${it.itemPrice})")
+            pieItemsData.add(PieChart.Data(
+                it.itemName.value, it.itemPrice.value
+            ))
         }
     }
-
-    var expenseModel = ExpensesEntryModel()
 
     fun add(entryDate: LocalDate, itemName: String, itemPrice: Double): ExpensesEntry {
         val newRow = execute {

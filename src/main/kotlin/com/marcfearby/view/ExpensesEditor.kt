@@ -2,6 +2,7 @@ package com.marcfearby.view
 
 import com.marcfearby.controller.ItemController
 import com.marcfearby.model.ExpensesEntryModel
+import javafx.geometry.Pos
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.layout.BorderPane
@@ -100,6 +101,13 @@ class ExpensesEditor: View("Expenses") {
                         column("Item price", ExpensesEntryModel::itemPrice)
                     }
                 }
+            }
+        }
+        right = vbox {
+            maxWidth = 400.0
+            alignment = Pos.CENTER
+            piechart {
+                data = controller.pieItemsData
             }
         }
     }
