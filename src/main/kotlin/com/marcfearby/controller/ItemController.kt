@@ -57,6 +57,7 @@ class ItemController: Controller() {
         listOfItems.add(ExpensesEntryModel().apply {
             item = newEntry
         })
+        pieItemsData.add(PieChart.Data(itemName, itemPrice))
         return newEntry
     }
 
@@ -71,10 +72,18 @@ class ItemController: Controller() {
     }
 
     fun delete(item: ExpensesEntryModel): Int {
+        listOfItems.remove(item)
+        removeItemFromPieChart(item)
         return execute {
             ExpensesEntryTable.deleteWhere { ExpensesEntryTable.id eq(item.id.value) }
         }
-        listOfItems.remove(item)
+    }
+
+    private fun removeItemFromPieChart(item: ExpensesEntryModel) {
+        val index = pieItemsData.indexOfFirst {
+            it.name == item.itemName.value && it.pieValue == item.itemPrice.value
+        }
+        if (index >= 0) pieItemsData.removeAt(index)
     }
 
 }
