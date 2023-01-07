@@ -5,6 +5,7 @@ import com.marcfearby.model.ExpensesEntryModel
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.geometry.Pos
+import javafx.scene.control.Alert
 import javafx.scene.control.Label
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
@@ -26,6 +27,10 @@ class ExpensesEditor: View("Expenses") {
     }
 
     override val root: BorderPane = borderpane {
+        disableSave()
+        disableDelete()
+        disableCreate()
+
         center = vbox {
             form {
                 fieldset {
@@ -100,7 +105,12 @@ class ExpensesEditor: View("Expenses") {
                         }
                     }
                     button("Reset") {
-                        action {  }
+                        enableWhen(model.valid)
+                        action {
+                            model.commit {
+                                model.rollback()
+                            }
+                        }
                     }
                 }
 
@@ -116,6 +126,7 @@ class ExpensesEditor: View("Expenses") {
                         onEditCommit {
                             controller.update(it)
                             controller.updatePiePiece(it)
+                            updateTotalExpenses()
                         }
                     }
                 }
@@ -149,6 +160,11 @@ class ExpensesEditor: View("Expenses") {
                 }
             }
         }
+    }
+
+    override fun onRefresh() {
+        super.onRefresh()
+        alert(Alert.AlertType.INFORMATION, "Refresh button clicked")
     }
 
     private fun invokeAddItem(event: KeyEvent) {
