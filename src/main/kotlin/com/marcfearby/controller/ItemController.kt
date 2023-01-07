@@ -86,6 +86,18 @@ class ItemController: Controller() {
         if (index >= 0) pieItemsData.removeAt(index)
     }
 
+    fun updatePiePiece(piece: ExpensesEntryModel) {
+        val index = items.indexOfFirst {
+            piece.id == it.id
+        }
+        if (index >= 0) {
+            pieItemsData[index].let {
+                it.name = piece.itemName.value
+                it.pieValue = piece.itemPrice.value
+            }
+        }
+    }
+
 }
 
 
