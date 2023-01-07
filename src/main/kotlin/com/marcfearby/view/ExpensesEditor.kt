@@ -2,7 +2,10 @@ package com.marcfearby.view
 
 import com.marcfearby.controller.ItemController
 import com.marcfearby.model.ExpensesEntryModel
+import javafx.beans.binding.Bindings
+import javafx.beans.property.SimpleDoubleProperty
 import javafx.geometry.Pos
+import javafx.scene.control.Label
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.layout.BorderPane
@@ -13,6 +16,12 @@ class ExpensesEditor: View("Expenses") {
     private val controller: ItemController by inject()
     private val model = ExpensesEntryModel()
     var mTableView: TableViewEditModel<ExpensesEntryModel> by singleAssign()
+    private val totalExpensesProperty = SimpleDoubleProperty(0.0)
+    var totalExpensesLabel: Label by singleAssign()
+
+    init {
+        updateTotalExpenses()
+    }
 
     override val root: BorderPane = borderpane {
         center = vbox {
@@ -83,6 +92,8 @@ class ExpensesEditor: View("Expenses") {
                         action {
                             mTableView.tableView.selectedItem?.let {
                                 controller.delete(it)
+                                totalExpensesProperty.value -= it.itemPrice.value
+                                updateTotalExpenses()
                             }
                         }
                     }
@@ -114,6 +125,16 @@ class ExpensesEditor: View("Expenses") {
             piechart {
                 data = controller.pieItemsData
             }
+            totalExpensesLabel = label {
+                if (totalExpensesProperty.value != 0.0) {
+                    bind(
+                        Bindings.concat(
+                            "Total Expenses: $",
+                            Bindings.format("%.2f", totalExpensesProperty)
+                        )
+                    )
+                }
+            }
         }
     }
 
@@ -130,6 +151,16 @@ class ExpensesEditor: View("Expenses") {
         with(model) {
             controller.add(entryDate.value, itemName.value, itemPrice.value)
         }
+    }
+
+    private fun updateTotalExpenses() {
+        val total: Double = try {
+            controller.items.sumOf { it.itemPrice.value }
+        } catch (_: Exception) {
+            0.0
+        }
+        totalExpensesProperty.set(total)
+        model.totalExpenses.value = total
     }
 
 }
