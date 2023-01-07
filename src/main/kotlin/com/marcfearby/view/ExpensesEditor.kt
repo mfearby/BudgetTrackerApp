@@ -9,6 +9,8 @@ import javafx.scene.control.Label
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.layout.BorderPane
+import javafx.scene.paint.Color
+import javafx.scene.text.FontWeight
 import tornadofx.*
 
 class ExpensesEditor: View("Expenses") {
@@ -119,13 +121,24 @@ class ExpensesEditor: View("Expenses") {
                 }
             }
         }
-        right = vbox {
+        right = vbox(10) {
             maxWidth = 400.0
             alignment = Pos.CENTER
+            paddingBottom = 10.0
+
             piechart {
                 data = controller.pieItemsData
             }
+
             totalExpensesLabel = label {
+                style {
+                    fontSize = 19.px
+                    padding = box(10.px)
+                    textFill = Color.GREEN
+                    fontWeight = FontWeight.EXTRA_BOLD
+                    borderRadius = multi(box(5.px))
+                    backgroundColor += c("white", 0.8)
+                }
                 if (totalExpensesProperty.value != 0.0) {
                     bind(
                         Bindings.concat(
@@ -150,6 +163,7 @@ class ExpensesEditor: View("Expenses") {
     private fun addItem() {
         with(model) {
             controller.add(entryDate.value, itemName.value, itemPrice.value)
+            updateTotalExpenses()
         }
     }
 
